@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Light theme (:root = default) ────────────────────────── */
+:root {
+    /* Фоны */
+    --bg-color: #f0f2f5;
+    /* фон страницы */
+    --bg-secondary-color: #ffffff;
+    /* фон карточек */
+    --bg-sidebar-color: #1e293b;
+    /* сайдбар (тёмный в обеих темах) */
+
+    /* Текст */
+    --text-color: #1a1a2e;
+    /* основной */
+    --text-muted-color: #6b7280;
+    /* второстепенный */
+    --text-sidebar-color: #9ca3af;
+    /* текст в сайдбаре */
+
+    /* Акценты */
+    --primary-color: #22c55e;
+    /* зелёный — доходы, лого, кнопки */
+    --primary-hover-color: #16a34a;
+    --expense-color: #ef4444;
+    /* красный — расходы */
+    --expense-hover-color: #dc2626;
+
+    /* Границы и тени */
+    --border-color: #e5e7eb;
+    --shadow-color: rgba(0, 0, 0, 0.07);
+
+    /* Активный элемент сайдбара */
+    --sidebar-active-bg: #166534;
+    /* тёмно-зелёный фон активного пункта */
+    --sidebar-active-text: #ffffff;
+}
+
+/* ─── Dark theme (.dark на <html>) ─────────────────────────── */
+.dark {
+    /* Фоны */
+    --bg-color: #131520;
+    /* фон страницы */
+    --bg-secondary-color: #1c1f2e;
+    /* фон карточек */
+    --bg-sidebar-color: #0f1117;
+    /* сайдбар */
+
+    /* Текст */
+    --text-color: #f0f2f5;
+    --text-muted-color: #8a8fa8;
+    --text-sidebar-color: #9ca3af;
+
+    /* Акценты (те же цвета, тема не меняет их) */
+    --primary-color: #22c55e;
+    --primary-hover-color: #16a34a;
+    --expense-color: #ef4444;
+    --expense-hover-color: #dc2626;
+
+    /* Границы и тени */
+    --border-color: #2a2d3e;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+
+    /* Активный элемент сайдбара */
+    --sidebar-active-bg: #166534;
+    --sidebar-active-text: #ffffff;
+}
+
+/* ─── Tailwind токены (@theme) ──────────────────────────────── */
+/*
+
+    Примеры использования в className:
+      bg-surface          → фон страницы
+      bg-card             → фон карточки
+      bg-sidebar          → фон сайдбара
+      text-foreground     → основной текст
+      text-muted          → второстепенный текст
+      text-primary        → зелёный акцент
+      text-expense        → красный (расходы)
+      border-border       → граница
+      bg-sidebar-active   → активный пункт меню
+*/
+@theme inline {
+    --color-surface: var(--bg-color);
+    --color-card: var(--bg-secondary-color);
+    --color-sidebar: var(--bg-sidebar-color);
+
+    --color-foreground: var(--text-color);
+    --color-muted: var(--text-muted-color);
+    --color-sidebar-text: var(--text-sidebar-color);
+
+    --color-primary: var(--primary-color);
+    --color-primary-hover: var(--primary-hover-color);
+    --color-expense: var(--expense-color);
+    --color-expense-hover: var(--expense-hover-color);
+
+    --color-border: var(--border-color);
+    --color-sidebar-active: var(--sidebar-active-bg);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
