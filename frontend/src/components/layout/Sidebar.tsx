@@ -9,6 +9,8 @@ import { Menu, X } from "lucide-react"
 const links = [
     { href: '/dashboard', label: '📊 Аналитика' },
     { href: '/transactions', label: '💳 Транзакции' },
+    { href: '/reports', label: '📋 Отчёты' },
+    { href: '/tips', label: '💡 Советы' },
 ]
 
 export function SideBar() {
@@ -88,7 +90,7 @@ export function SideBar() {
                         <Link
                             key={link.href}
                             href={link.href}
-                            className={`px-4 py-3 rounded-lg transition-colors ${pathname === link.href
+                            className={`px-4 py-3 rounded-lg transition-colors ${pathname === link.href || pathname.startsWith(link.href + '/')
                                 ? 'bg-sidebar-active text-white'
                                 : 'hover:bg-white/10 text-sidebar-text'
                                 }`}

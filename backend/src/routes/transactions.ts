@@ -40,13 +40,21 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 router.get('/stats', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const { dateFrom, dateTo } = req.query as Record<string, string>
+
+        const dateFilter = {
+            ...(dateFrom && { gte: dateFrom }),
+            ...(dateTo && { lte: dateTo }),
+        }
+        const hasDateFilter = Object.keys(dateFilter).length > 0
+
         const [incomeResult, expenseResult] = await Promise.all([
             prisma.transaction.aggregate({
-                where: { type: 'income' },
+                where: { type: 'income', ...(hasDateFilter && { date: dateFilter }) },
                 _sum: { amount: true }
             }),
             prisma.transaction.aggregate({
-                where: { type: 'expense' },
+                where: { type: 'expense', ...(hasDateFilter && { date: dateFilter }) },
                 _sum: { amount: true }
             }),
         ])
@@ -66,7 +74,7 @@ router.get('/stats', async (req: Request, res: Response, next: NextFunction) => 
 
 router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id } = req.params
+        const id = req.params.id as string
 
         const transaction = await prisma.transaction.findUnique({
             where: { id },
@@ -114,7 +122,7 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
 
 router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id } = req.params
+        const id = req.params.id as string
         const { title, amount, type, category, date, description } = req.body
 
         if (type !== undefined && type !== 'income' && type !== 'expense') {
@@ -147,7 +155,7 @@ router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
 
 router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id } = req.params
+        const id = req.params.id as string
 
         await prisma.transaction.delete({ where: { id } })
 

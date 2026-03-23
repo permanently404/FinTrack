@@ -26,13 +26,14 @@ async function deleteTransaction(id: string): Promise<void> {
     await axios.delete(`${API}/api/transactions/${id}`)
 }
 
-export function useTransactions() {
+export function useTransactions(initialData?: PaginatedResponse<Transaction>) {
     const filters = useTransactionStore((state) => state.filters)
 
     return useQuery({
         queryKey: ['transactions', filters],
         queryFn: () => fetchTransactions(filters),
         placeholderData: keepPreviousData,
+        ...(initialData && { initialData }),
     })
 }
 

@@ -4,7 +4,7 @@ import { useTransactionStore } from '@/store/transactionStore'
 
 beforeEach(() => {
     useTransactionStore.setState({
-        filters: { category: 'all', type: 'all', dateFrom: '', dateTo: '', search: '' },
+        filters: { category: 'all', type: 'all', dateFrom: '', dateTo: '', search: '', page: 1, limit: 1000 },
     })
 })
 

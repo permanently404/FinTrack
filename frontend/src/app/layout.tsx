@@ -19,7 +19,7 @@ export default function RootLayout({
         <Providers>
           <div className="flex h-screen overflow-hidden">
             <SideBar />
-            <main className="flex-1 bg-surface text-foreground overflow-x-hidden overflow-y-auto lg:overflow-y-hidden pt-14 md:pt-0">
+            <main className="flex-1 bg-surface text-foreground overflow-x-hidden overflow-y-auto pt-14 md:pt-0">
               {children}
             </main>
           </div>

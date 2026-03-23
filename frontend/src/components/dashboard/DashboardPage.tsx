@@ -8,8 +8,14 @@ import { ExpenseChart } from '@/components/charts/ExpenseChart'
 import { TransactionsTable } from '@/components/transactions/TransactionsTable'
 import { formatCurrency } from '@/lib/formatCurrency'
 import { Header } from '@/components/layout/Header'
-export function DashboardPage() {
-    const { data: response, isLoading } = useTransactions()
+import type { Transaction, PaginatedResponse } from '@/types'
+
+interface DashboardProps {
+    initialData?: PaginatedResponse<Transaction>
+}
+
+export function DashboardPage({ initialData }: DashboardProps) {
+    const { data: response, isLoading } = useTransactions(initialData)
 
     const displayData = response?.data || []
 
