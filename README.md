@@ -16,6 +16,10 @@
 
 ## 📸 Скриншоты
 
+![Дашборд]<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/5703ad8c-f863-4e2d-875c-d4dad22d8dab" />
+![Транзакции]<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/51d85a7d-b2e9-4b45-9916-215448f93941" />
+![Отчёт за месяц]<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a6856d9b-5d97-4fb2-aec7-e5d382cedd43" />
+![Логин]<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/1e314167-9f10-410f-b3fa-144e4fc38ece" />
 
 
 ---
