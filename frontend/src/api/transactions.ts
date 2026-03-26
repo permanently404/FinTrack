@@ -1,29 +1,27 @@
-import axios from 'axios'
 import { Transaction, TransactionFilters, PaginatedResponse } from '@/types'
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 import { useTransactionStore } from '@/store/transactionStore'
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
+import { apiClient } from './axios'
 
 async function fetchTransactions(filters: TransactionFilters): Promise<PaginatedResponse<Transaction>> {
-    const { data } = await axios.get<PaginatedResponse<Transaction>>(`${API}/api/transactions`, {
+    const { data } = await apiClient.get<PaginatedResponse<Transaction>>('/api/transactions', {
         params: filters,
     })
     return data
 }
 
 async function addTransaction(body: Omit<Transaction, 'id'>): Promise<Transaction> {
-    const { data } = await axios.post<Transaction>(`${API}/api/transactions`, body)
+    const { data } = await apiClient.post<Transaction>('/api/transactions', body)
     return data
 }
 
 async function editTransaction({ id, ...body }: Transaction): Promise<Transaction> {
-    const { data } = await axios.put<Transaction>(`${API}/api/transactions/${id}`, body)
+    const { data } = await apiClient.put<Transaction>(`/api/transactions/${id}`, body)
     return data
 }
 
 async function deleteTransaction(id: string): Promise<void> {
-    await axios.delete(`${API}/api/transactions/${id}`)
+    await apiClient.delete(`/api/transactions/${id}`)
 }
 
 export function useTransactions(initialData?: PaginatedResponse<Transaction>) {

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Header } from '@/components/layout/Header'
@@ -44,10 +45,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
 }
 
-async function fetchReport(dateFrom: string, dateTo: string) {
+async function fetchReport(dateFrom: string, dateTo: string, token?: string) {
+    const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {}
+
     const [transactionsRes, statsRes] = await Promise.all([
-        fetch(`${API_URL}/api/transactions?dateFrom=${dateFrom}&dateTo=${dateTo}&limit=1000`, { cache: 'no-store' }),
-        fetch(`${API_URL}/api/transactions/stats?dateFrom=${dateFrom}&dateTo=${dateTo}`, { cache: 'no-store' }),
+        fetch(`${API_URL}/api/transactions?dateFrom=${dateFrom}&dateTo=${dateTo}&limit=1000`, { cache: 'no-store', headers }),
+        fetch(`${API_URL}/api/transactions/stats?dateFrom=${dateFrom}&dateTo=${dateTo}`, { cache: 'no-store', headers }),
     ])
 
     if (!transactionsRes.ok || !statsRes.ok) return null
@@ -79,7 +82,10 @@ export default async function ReportPage({ params }: PageProps) {
     const parsed = parseMonth(month)
     if (!parsed) notFound()
 
-    const report = await fetchReport(parsed.dateFrom, parsed.dateTo)
+    const cookieStore = await cookies()
+    const token = cookieStore.get('accessToken')?.value
+
+    const report = await fetchReport(parsed.dateFrom, parsed.dateTo, token)
     if (!report) notFound()
 
     const { transactions, stats } = report

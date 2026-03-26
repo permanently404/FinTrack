@@ -6,6 +6,7 @@ const prisma = new PrismaClient()
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const userId = req.userId!
         const { category, type, dateFrom, dateTo, search } = req.query as Record<string, string>
 
         const page = Math.max(1, parseInt(req.query.page as string) || 1)
@@ -13,6 +14,7 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
         const skip = (page - 1) * limit
 
         const where = {
+            userId,
             ...(category && category !== 'all' && { category }),
             ...(type && type !== 'all' && { type }),
             ...(dateFrom && { date: { gte: dateFrom } }),
@@ -40,6 +42,7 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 router.get('/stats', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const userId = req.userId!
         const { dateFrom, dateTo } = req.query as Record<string, string>
 
         const dateFilter = {
@@ -50,23 +53,19 @@ router.get('/stats', async (req: Request, res: Response, next: NextFunction) => 
 
         const [incomeResult, expenseResult] = await Promise.all([
             prisma.transaction.aggregate({
-                where: { type: 'income', ...(hasDateFilter && { date: dateFilter }) },
-                _sum: { amount: true }
+                where: { userId, type: 'income', ...(hasDateFilter && { date: dateFilter }) },
+                _sum: { amount: true },
             }),
             prisma.transaction.aggregate({
-                where: { type: 'expense', ...(hasDateFilter && { date: dateFilter }) },
-                _sum: { amount: true }
+                where: { userId, type: 'expense', ...(hasDateFilter && { date: dateFilter }) },
+                _sum: { amount: true },
             }),
         ])
 
         const income = incomeResult._sum.amount ?? 0
         const expense = expenseResult._sum.amount ?? 0
 
-        res.json({
-            income,
-            expense,
-            balance: income - expense
-        })
+        res.json({ income, expense, balance: income - expense })
     } catch (err) {
         next(err)
     }
@@ -74,13 +73,12 @@ router.get('/stats', async (req: Request, res: Response, next: NextFunction) => 
 
 router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const userId = req.userId!
         const id = req.params.id as string
 
-        const transaction = await prisma.transaction.findUnique({
-            where: { id },
-        })
+        const transaction = await prisma.transaction.findUnique({ where: { id } })
 
-        if (!transaction) {
+        if (!transaction || transaction.userId !== userId) {
             res.status(404).json({ error: 'Транзакция не найдена' })
             return
         }
@@ -93,6 +91,7 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
 
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const userId = req.userId!
         const { title, amount, type, category, date, description } = req.body
 
         if (!title || !amount || !type || !category || !date) {
@@ -111,7 +110,7 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
         }
 
         const transaction = await prisma.transaction.create({
-            data: { title, amount: Number(amount), type, category, date, description },
+            data: { userId, title, amount: Number(amount), type, category, date, description },
         })
 
         res.status(201).json(transaction)
@@ -122,8 +121,15 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
 
 router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const userId = req.userId!
         const id = req.params.id as string
         const { title, amount, type, category, date, description } = req.body
+
+        const existing = await prisma.transaction.findUnique({ where: { id } })
+        if (!existing || existing.userId !== userId) {
+            res.status(404).json({ error: 'Транзакция не найдена' })
+            return
+        }
 
         if (type !== undefined && type !== 'income' && type !== 'expense') {
             res.status(400).json({ error: 'type должен быть income или expense' })
@@ -155,7 +161,14 @@ router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
 
 router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const userId = req.userId!
         const id = req.params.id as string
+
+        const existing = await prisma.transaction.findUnique({ where: { id } })
+        if (!existing || existing.userId !== userId) {
+            res.status(404).json({ error: 'Транзакция не найдена' })
+            return
+        }
 
         await prisma.transaction.delete({ where: { id } })
 

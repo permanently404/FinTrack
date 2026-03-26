@@ -1,10 +1,12 @@
 'use client'
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { ThemeToggle } from "../ui/ThemeToggle"
 import { useState, useEffect } from "react"
-import { Menu, X } from "lucide-react"
+import { Menu, X, LogOut } from "lucide-react"
+import { useAuthStore } from "@/store/authStore"
+import { useQueryClient } from "@tanstack/react-query"
 
 const links = [
     { href: '/dashboard', label: '📊 Аналитика' },
@@ -15,7 +17,17 @@ const links = [
 
 export function SideBar() {
     const pathname = usePathname()
+    const router = useRouter()
     const [open, setOpen] = useState(false)
+    const user = useAuthStore((s) => s.user)
+    const logout = useAuthStore((s) => s.logout)
+    const queryClient = useQueryClient()
+
+    function handleLogout() {
+        logout()
+        queryClient.clear()
+        router.push('/login')
+    }
 
     useEffect(() => {
         setOpen(false)
@@ -100,8 +112,24 @@ export function SideBar() {
                     ))}
                 </nav>
 
-                <div className="mt-auto pt-6 border-t border-white/10 flex justify-center">
-                    <ThemeToggle />
+                <div className="mt-auto pt-6 border-t border-white/10 flex flex-col gap-3">
+                    {user && (
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm text-sidebar-text truncate">
+                                {user.name ?? user.email}
+                            </span>
+                            <button
+                                onClick={handleLogout}
+                                className="p-1.5 text-sidebar-text hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                                title="Выйти"
+                            >
+                                <LogOut size={16} />
+                            </button>
+                        </div>
+                    )}
+                    <div className="flex justify-center">
+                        <ThemeToggle />
+                    </div>
                 </div>
             </aside>
         </>

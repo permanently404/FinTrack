@@ -16,8 +16,21 @@ model Transaction {
   date        String
   description String?
   createdAt   DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
 
   @@index([date])
   @@index([type])
   @@index([category])
+  @@index([userId])
+}
+
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  name      String?
+  createdAt DateTime  @default(now())
+  transactions Transaction[]
 }

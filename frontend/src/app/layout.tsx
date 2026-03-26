@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Providers } from '@/components/providers/providers'
-import { SideBar } from '@/components/layout/Sidebar'
+import { AppShell } from '@/components/layout/AppShell'
 
 export const metadata: Metadata = {
   title: 'FinTrack',
@@ -17,12 +17,9 @@ export default function RootLayout({
     <html lang="ru" suppressHydrationWarning>
       <body>
         <Providers>
-          <div className="flex h-screen overflow-hidden">
-            <SideBar />
-            <main className="flex-1 bg-surface text-foreground overflow-x-hidden overflow-y-auto pt-14 md:pt-0">
-              {children}
-            </main>
-          </div>
+          <AppShell>
+            {children}
+          </AppShell>
         </Providers>
       </body>
     </html>

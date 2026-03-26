@@ -44,6 +44,12 @@ export interface Notification {
     read: boolean,
 }
 
+export interface AuthUser {
+    id: string
+    email: string
+    name: string | null
+}
+
 export interface MonthlyBalance {
     month: string,
     income: number,

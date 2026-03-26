@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
@@ -34,7 +35,7 @@ function generateDate(): string {
     return date.toISOString().slice(0, 10)
 }
 
-function generateTransaction() {
+function generateTransaction(userId: string) {
     const isIncome = Math.random() < 0.2
     const type: TransactionType = isIncome ? 'income' : 'expense'
     const category: Category = isIncome
@@ -42,6 +43,7 @@ function generateTransaction() {
         : randomItem(EXPENSE_CATEGORIES)
 
     return {
+        userId,
         title: randomItem(TITLES[category]),
         amount: isIncome ? randomBetween(10000, 80000) : randomBetween(100, 8000),
         type,
@@ -51,14 +53,31 @@ function generateTransaction() {
 }
 
 async function main() {
-    console.log('Очищаем таблицу...')
+    console.log('Очищаем таблицы...')
     await prisma.transaction.deleteMany()
+    await prisma.user.deleteMany()
+
+    console.log('Создаём тестового пользователя...')
+    const hashedPassword = await bcrypt.hash('12345Test', 10)
+    const user = await prisma.user.create({
+        data: {
+            email: 'test@test.com',
+            password: hashedPassword,
+            name: 'Тестовый пользователь',
+        },
+    })
+
+    console.log(`Пользователь создан: ${user.email}`)
 
     console.log('Создаём 80 транзакций...')
-    const data = Array.from({ length: 80 }, generateTransaction)
+    const data = Array.from({ length: 80 }, () => generateTransaction(user.id))
     await prisma.transaction.createMany({ data })
 
     console.log('Готово!')
+    console.log('---')
+    console.log('Данные для входа:')
+    console.log('  Email:    test@test.com')
+    console.log('  Пароль:   password123')
 }
 
 main()
