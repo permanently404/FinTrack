@@ -8,6 +8,7 @@ import { TransactionFilters } from '@/components/transactions/TransactionFilters
 import { AddTransactionModal } from '@/components/transactions/AddTransactionModal'
 import { MobileTransactionList } from '@/components/transactions/MobileTransactionList'
 import { useTransactionStore } from '@/store/transactionStore'
+import { ExportDropdown } from '@/components/transactions/ExportDropdown'
 
 const PAGE_SIZE = 20
 
@@ -54,6 +55,7 @@ export default function TransactionsPage() {
                             <p className="text-sm text-muted">
                                 Найдено: {total} транзакций
                             </p>
+                            <ExportDropdown total={total} disabled={total === 0} />
                         </div>
                         <div className="lg:min-h-0 lg:flex lg:flex-col lg:flex-1">
                             <TransactionsTable
@@ -66,9 +68,12 @@ export default function TransactionsPage() {
 
                     {/* Mobile */}
                     <div className="sm:hidden">
-                        <p className="text-sm text-muted mb-2">
-                            Найдено: {total} транзакций
-                        </p>
+                        <div className="flex justify-between items-center mb-2">
+                            <p className="text-sm text-muted">
+                                Найдено: {total} транзакций
+                            </p>
+                            <ExportDropdown total={total} disabled={total === 0} />
+                        </div>
                         <MobileTransactionList
                             transactions={transactions}
                             page={page}

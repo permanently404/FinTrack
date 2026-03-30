@@ -16,7 +16,12 @@ function readLocalStorage<T>(key: string, fallback: T): T {
     if (typeof window === 'undefined') return fallback
     try {
         const item = localStorage.getItem(key)
-        return item ? JSON.parse(item) : fallback
+        if (!item) return fallback
+        try {
+            return JSON.parse(item) as T
+        } catch {
+            return item as unknown as T
+        }
     } catch {
         return fallback
     }

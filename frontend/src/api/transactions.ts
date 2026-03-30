@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tansta
 import { useTransactionStore } from '@/store/transactionStore'
 import { apiClient } from './axios'
 
-async function fetchTransactions(filters: TransactionFilters): Promise<PaginatedResponse<Transaction>> {
+export async function fetchTransactions(filters: TransactionFilters): Promise<PaginatedResponse<Transaction>> {
     const { data } = await apiClient.get<PaginatedResponse<Transaction>>('/api/transactions', {
         params: filters,
     })

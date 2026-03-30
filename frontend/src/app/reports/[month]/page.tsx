@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { cookies } from 'next/headers'
+import Link from 'next/link'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Header } from '@/components/layout/Header'
@@ -103,9 +104,9 @@ export default async function ReportPage({ params }: PageProps) {
         <div className="min-h-full flex flex-col">
             <div className="sticky top-0 z-10 bg-surface flex justify-between items-center p-4 md:p-6 pb-3">
                 <div className="flex items-center gap-3">
-                    <a href={`/reports/${prevMonth}`} className="text-muted hover:text-foreground transition-colors text-lg">&larr;</a>
+                    <Link href={`/reports/${prevMonth}`} className="text-muted hover:text-foreground transition-colors text-lg">&larr;</Link>
                     <h1 className="text-xl md:text-2xl font-bold text-foreground">{monthLabel}</h1>
-                    <a href={`/reports/${nextMonth}`} className="text-muted hover:text-foreground transition-colors text-lg">&rarr;</a>
+                    <Link href={`/reports/${nextMonth}`} className="text-muted hover:text-foreground transition-colors text-lg">&rarr;</Link>
                 </div>
                 <Header />
             </div>

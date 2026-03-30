@@ -1,3 +1,5 @@
+import { categoryLabels, typeLabels } from '@/lib/categoryLabels'
+
 const variants = {
     income: 'bg-green-100 text-green-700',
     expense: 'bg-red-100 text-red-700',
@@ -10,17 +12,7 @@ const variants = {
     other: 'bg-gray-100 text-gray-700',
 }
 
-const labels: Record<string, string> = {
-    income: 'Доход',
-    expense: 'Расход',
-    food: 'Еда',
-    transport: 'Транспорт',
-    entertainment: 'Развлечения',
-    health: 'Здоровье',
-    shopping: 'Покупки',
-    salary: 'Зарплата',
-    other: 'Прочее',
-}
+const labels: Record<string, string> = { ...categoryLabels, ...typeLabels }
 
 interface BadgeProps {
     variant: keyof typeof variants

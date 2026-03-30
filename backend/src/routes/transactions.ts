@@ -13,12 +13,16 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
         const limit = Math.min(1000, Math.max(1, parseInt(req.query.limit as string) || 1000))
         const skip = (page - 1) * limit
 
+        const dateFilter = {
+            ...(dateFrom && { gte: dateFrom }),
+            ...(dateTo && { lte: dateTo }),
+        }
+
         const where = {
             userId,
             ...(category && category !== 'all' && { category }),
             ...(type && type !== 'all' && { type }),
-            ...(dateFrom && { date: { gte: dateFrom } }),
-            ...(dateTo && { date: { lte: dateTo } }),
+            ...(Object.keys(dateFilter).length > 0 && { date: dateFilter }),
             ...(search && {
                 title: { contains: search, mode: 'insensitive' as const },
             }),
