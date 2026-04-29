@@ -18,6 +18,8 @@ export function MobileTransactionList({ transactions, page, totalPages, onLoadMo
     const sentinelRef = useRef<HTMLDivElement>(null)
     const hasMore = page < totalPages
 
+    /* eslint-disable react-hooks/set-state-in-effect */
+    // accumulate pages for infinite scroll
     useEffect(() => {
         if (page === 1) {
             setItems(transactions)
@@ -29,6 +31,7 @@ export function MobileTransactionList({ transactions, page, totalPages, onLoadMo
             })
         }
     }, [transactions, page])
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     useEffect(() => {
         const sentinel = sentinelRef.current
