@@ -1,5 +1,4 @@
 import { NotificationBell } from '@/components/notifications/NotificationBell'
-import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 export function Header() {
     return (

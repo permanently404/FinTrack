@@ -17,7 +17,7 @@ interface DashboardProps {
 export function DashboardPage({ initialData }: DashboardProps) {
     const { data: response, isLoading } = useTransactions(initialData)
 
-    const displayData = response?.data || []
+    const displayData = useMemo(() => response?.data ?? [], [response?.data])
 
     const totalIncome = useMemo(() => displayData.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0), [displayData])
     const totalExpense = useMemo(() => displayData.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0), [displayData])
