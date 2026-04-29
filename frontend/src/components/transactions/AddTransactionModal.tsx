@@ -62,8 +62,9 @@ export function AddTransactionModal() {
 
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-muted mb-1">Название</label>
+                                <label htmlFor='name' className="block text-sm font-medium text-muted mb-1">Название</label>
                                 <input
+                                    id='name'
                                     type="text"
                                     value={form.title}
                                     onChange={(e) => setForm({ ...form, title: e.target.value })}
@@ -73,8 +74,9 @@ export function AddTransactionModal() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-muted mb-1">Сумма (₽)</label>
+                                <label htmlFor='amount' className="block text-sm font-medium text-muted mb-1">Сумма (₽)</label>
                                 <input
+                                    id='amount'
                                     type="number"
                                     value={form.amount}
                                     onChange={(e) => setForm({ ...form, amount: e.target.value })}
@@ -85,8 +87,9 @@ export function AddTransactionModal() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-muted mb-1">Тип</label>
+                                    <label htmlFor='type' className="block text-sm font-medium text-muted mb-1">Тип</label>
                                     <select
+                                        id='type'
                                         value={form.type}
                                         onChange={(e) => setForm({ ...form, type: e.target.value as TransactionType })}
                                         className={inputClasses}
@@ -97,8 +100,9 @@ export function AddTransactionModal() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-muted mb-1">Категория</label>
+                                    <label htmlFor='category' className="block text-sm font-medium text-muted mb-1">Категория</label>
                                     <select
+                                        id='category'
                                         value={form.category}
                                         onChange={(e) => setForm({ ...form, category: e.target.value as TransactionCategory })}
                                         className={inputClasses}
@@ -115,8 +119,9 @@ export function AddTransactionModal() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-muted mb-1">Дата</label>
+                                <label htmlFor='date' className="block text-sm font-medium text-muted mb-1">Дата</label>
                                 <input
+                                    id='date'
                                     type="date"
                                     value={form.date}
                                     onChange={(e) => setForm({ ...form, date: e.target.value })}

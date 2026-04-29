@@ -28,6 +28,11 @@ backend/prisma/dev.db-journal
 .idea/
 .vscode/
 
+# Playwright
+frontend/e2e/storageState.json
+frontend/playwright-report/
+frontend/test-results/
+
 # Misc
 .DS_Store
 *.pem

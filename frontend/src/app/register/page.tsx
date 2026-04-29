@@ -48,8 +48,9 @@ export default function RegisterPage() {
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-foreground">Имя (необязательно)</label>
+                    <label htmlFor='name' className="text-sm font-medium text-foreground">Имя (необязательно)</label>
                     <input
+                        id='name'
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -59,8 +60,9 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-foreground">Email</label>
+                    <label htmlFor='email' className="text-sm font-medium text-foreground">Email</label>
                     <input
+                        id='email'
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -71,9 +73,10 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-foreground">Пароль</label>
+                    <label htmlFor='password' className="text-sm font-medium text-foreground">Пароль</label>
                     <div className="relative">
                         <input
+                            id='password'
                             type={showPassword ? 'text' : 'password'}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -93,9 +96,10 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-foreground">Повторите пароль</label>
+                    <label htmlFor='confirm' className="text-sm font-medium text-foreground">Повторите пароль</label>
                     <div className="relative">
                         <input
+                            id='confirm'
                             type={showPassword ? 'text' : 'password'}
                             value={confirm}
                             onChange={(e) => { setConfirm(e.target.value); setConfirmError('') }}
